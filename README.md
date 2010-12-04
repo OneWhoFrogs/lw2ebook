@@ -15,6 +15,6 @@ To convert http://lesswrong.com/lw/4g/eliezer\_yudkowsky\_facts/ to an epub:
 
 To convert the Zombies sequence into a mobi:
 
-	Add the URLs mentioned [here](http://wiki.lesswrong.com/wiki/Zombies_%28sequence%29) to urls.txt then run:
+Add the URLs mentioned [here](http://wiki.lesswrong.com/wiki/Zombies_%28sequence%29) to urls.txt then run:
 	
 	ruby sequence.rb mobi "Zombies"
