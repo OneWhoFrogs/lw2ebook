@@ -1,7 +1,9 @@
 #!/usr/bin/env ruby -KU
 # encoding: UTF-8
 
-require 'rubygems'
+# Author: OneWhoFrogs <onewhofrogs@gmail.com>
+# Feel free to contact me for any problem or idea -- I love email!
+
 require 'nokogiri'
 require 'open-uri'
 require 'tmpdir'
@@ -9,6 +11,7 @@ require 'fileutils'
 require 'pp'
 require 'digest/sha2'
 
+# Should be changed depending on your system. If not using a Unix-based OS, also change the "rm rf" command below.
 Path_to_ebook_convert = '/Applications/calibre.app/Contents/MacOS/ebook-convert'
 Abs_regex             = /^http:\/\/lesswrong.com\/lw\/[a-zA-Z0-9]{2,3}\/[a-zA-Z0-9_]*\/?$/
 Rel_regex             = /^\/lw\/[a-zA-Z0-9]{2,3}\/[a-zA-Z0-9_]*\/?$/
@@ -121,9 +124,6 @@ class Builder
   def convert
     puts "Compiling into an ebook..." unless Silenced
     `#{Path_to_ebook_convert} #{Temp_folder}/toc.html #{@slug}.#{@format} --title "#{@title}" --authors "LessWrong" --level1-toc "//top_level" --level2-toc "interlink" --toc-filter "^((?!#{Identifier_space}).)*$" --cover "logo.png" --comments "Less Wrong is a community devoted to refining the art of human rationality."`
-    @format = 'epub'
-    `#{Path_to_ebook_convert} #{Temp_folder}/toc.html #{@slug}.#{@format} --title "#{@title}" --authors "LessWrong" --level1-toc "//top_level" --level2-toc "interlink" --toc-filter "^((?!#{Identifier_space}).)*$" --cover "logo.png" --comments "Less Wrong is a community devoted to refining the art of human rationality."`
-    
     `rm -rf #{Temp_folder}`
   end
   

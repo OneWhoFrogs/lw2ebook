@@ -1,0 +1,16 @@
+The quickest workflow for converting sequences is highlighting the main posts, right clicking with "View Selection Source" (Firefox), and pasting the result here.
+
+For example, to convert the Zombies sequence (http://wiki.lesswrong.com/wiki/Zombies_%28sequence%29), I would paste this:
+
+</h2>
+<ul><li><a href="http://lesswrong.com/lw/p7/zombies_zombies/" class="external text" rel="nofollow">Zombies! Zombies?</a>
+</li><li><a href="http://lesswrong.com/lw/p8/zombie_responses/" class="external text" rel="nofollow">Zombie Responses</a>
+</li><li><a href="http://lesswrong.com/lw/p9/the_generalized_antizombie_principle/" class="external text" rel="nofollow">The Generalized Anti-Zombie Principle</a>
+</li><li><a href="http://lesswrong.com/lw/pa/gazp_vs_glut/" class="external text" rel="nofollow">GAZP vs. GLUT</a>
+</li><li><a href="http://lesswrong.com/lw/pb/belief_in_the_implied_invisible/" class="external text" rel="nofollow">Belief in the Implied Invisible</a>
+</li><li><a href="http://lesswrong.com/lw/pn/zombies_the_movie/" class="external text" rel="nofollow">Zombies: The Movie</a>
+	
+and run it using:
+ruby sequence.rb mobi "Zombies"
+
+Sequence.rb only parses for URLs, so this text should not interfere.
