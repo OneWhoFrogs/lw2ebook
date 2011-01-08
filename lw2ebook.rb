@@ -9,8 +9,8 @@ require 'open-uri'
 require 'fileutils'
 require 'digest/sha2'
 
-# Should be changed depending on your system. If not using a Unix-based OS, also change the "rm rf" command below.
-Path_to_ebook_convert = '/Applications/calibre.app/Contents/MacOS/ebook-convert'
+# Should be changed depending on your system.
+Path_to_ebook_convert = '' # this is usually '/Applications/calibre.app/Contents/MacOS/ebook-convert' on Macs
 abort "Please specify the path to calibre." if Path_to_ebook_convert.empty?
 Abs_regex             = /^http:\/\/lesswrong.com\/lw\/[a-zA-Z0-9]{2,3}\/[a-zA-Z0-9_]*\/?$/
 Rel_regex             = /^\/lw\/[a-zA-Z0-9]{2,3}\/[a-zA-Z0-9_]*\/?$/
