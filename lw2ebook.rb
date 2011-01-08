@@ -3,20 +3,21 @@
 
 # Author: OneWhoFrogs <onewhofrogs@gmail.com>
 # Feel free to contact me for any problem or idea -- I love email!
-
+require 'rubygems'
 require 'nokogiri'
 require 'open-uri'
-require 'tmpdir'
 require 'fileutils'
-require 'pp'
 require 'digest/sha2'
 
 # Should be changed depending on your system. If not using a Unix-based OS, also change the "rm rf" command below.
 Path_to_ebook_convert = '/Applications/calibre.app/Contents/MacOS/ebook-convert'
+abort "Please specify the path to calibre." if Path_to_ebook_convert.empty?
 Abs_regex             = /^http:\/\/lesswrong.com\/lw\/[a-zA-Z0-9]{2,3}\/[a-zA-Z0-9_]*\/?$/
 Rel_regex             = /^\/lw\/[a-zA-Z0-9]{2,3}\/[a-zA-Z0-9_]*\/?$/
 Img_regex             = /(?i)\.(jpg|png|gif)$/
-Identifier_space      = '​'
+Identifier_space      = '​' # this is a particular type of Unicode whitespace used as a hack to get the calibre TOS generator working.
+                            # calibre allows you to specify a regex which identifies chapters.  So each top level post gets this space
+                            # added to it.  That way, it can identify the top level posts as chapters.
 Silenced              = false
 
 class Post
@@ -83,13 +84,12 @@ class Post
       end
       loaded_links or Array.new
     end
-    # TODO: is it faster to make a new Nokogiri object from content or search all of the already created @page object?
     @_interlinks ||= load_interlinks
   end
 end
 
 class Builder
-  Temp_folder = "lw_temp" + Random.rand(10000).to_s
+  Temp_folder = "lw_temp" + rand(10000).to_s
   def initialize(posts, format, title, slug=nil)
     @posts = case posts
       when Post then [posts]
@@ -124,7 +124,7 @@ class Builder
   def convert
     puts "Compiling into an ebook..." unless Silenced
     `#{Path_to_ebook_convert} #{Temp_folder}/toc.html #{@slug}.#{@format} --title "#{@title}" --authors "LessWrong" --level1-toc "//top_level" --level2-toc "interlink" --toc-filter "^((?!#{Identifier_space}).)*$" --cover "logo.png" --comments "Less Wrong is a community devoted to refining the art of human rationality."`
-    `rm -rf #{Temp_folder}`
+    FileUtils.rm_rf Temp_folder #`rm -rf #{Temp_folder}`
   end
   
   def build
@@ -155,12 +155,10 @@ class Builder
     toc = "<html xmlns=\"http://www.w3.org/1999/xhtml\"><head><title>#{@title}</title></head><body class=\"vcenter\">" +
           "<div class=\"container\"><table><tr><td><h2 class=\"title\">#{@title}</h2>" +
           "</td></tr></table>#{notice}</div><ul>"
-          
-    @posts.each.with_index(1) do |post, i|
+    i = 1 # Ruby 1.8 does not support each_with_index
+    @posts.each do |post|
       toc += "<li><top_level><a href=\"#{post.slug}.html\">#{i.to_s + '. ' + post.title + Identifier_space}</a></top_level></li>"
-      #post.interlinks.each.with_index(1) do |link, j|
-      #  toc += "<li><interlink><a href=\"#{link.slug}.html\">#{i.to_s + '.' + j.to_s + ' ' + link.title + Identifier_space}</a></interlink></li>"
-      #end
+      i += 1
     end
     
     toc += "</ul></body></html>"
