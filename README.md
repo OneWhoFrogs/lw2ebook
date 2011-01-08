@@ -9,6 +9,9 @@
 
 ## Usage ##
 
+
+Before running, install calibre and point Path\_to\_ebook\_convert in lw2ebook.rb to wherever ebook-convert is on your machine.
+
 To convert http://lesswrong.com/lw/4g/eliezer\_yudkowsky\_facts/ to an epub:
 
 	ruby lw2ebook.rb epub http://lesswrong.com/lw/4g/eliezer_yudkowsky_facts/
