@@ -136,8 +136,8 @@ class Builder
   def write_post(post)
     content = download_images(post.content)
     urls_hash = Hash.new
-    @posts.each do |post|
-      urls_hash[post.url] = true
+    @posts.each do |p|
+      urls_hash[p.url] = true
     end
     if urls_hash.include?(post.url)
       title = post.title
