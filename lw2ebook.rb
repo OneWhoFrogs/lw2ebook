@@ -90,7 +90,7 @@ end
 
 class Builder
   Temp_folder = "lw_temp" + rand(10000).to_s
-  def initialize(posts, format, title, slug=nil)
+  def initialize(posts, format, title, author="LessWrong", slug=nil)
     @posts = case posts
       when Post then [posts]
       when Array then posts
@@ -105,6 +105,7 @@ class Builder
         slug
     end
     @format = format.delete('.')
+    @author = author
   end
   
   def write_html
@@ -123,7 +124,7 @@ class Builder
   
   def convert
     puts "Compiling into an ebook..." unless Silenced
-    `#{Path_to_ebook_convert} #{Temp_folder}/toc.html #{@slug}.#{@format} --title "#{@title}" --authors "LessWrong" --level1-toc "//top_level" --level2-toc "interlink" --toc-filter "^((?!#{Identifier_space}).)*$" --cover "logo.png" --comments "Less Wrong is a community devoted to refining the art of human rationality."`
+    `#{Path_to_ebook_convert} #{Temp_folder}/toc.html #{@slug}.#{@format} --title "#{@title}" --authors "#{@author}" --level1-toc "//top_level" --level2-toc "interlink" --toc-filter "^((?!#{Identifier_space}).)*$" --cover "logo.png" --comments "Less Wrong is a community devoted to refining the art of human rationality."`
     FileUtils.rm_rf Temp_folder #`rm -rf #{Temp_folder}`
   end
   
@@ -232,13 +233,13 @@ end
 # Command Line
 ###
 if __FILE__ == $0
-  unless ARGV.length == 2
-    puts "Usage: ruby #{__FILE__} [filetype] [url]"
-    puts "Example: ruby #{__FILE__} epub http://lesswrong.com/lw/34a/goals_for_which_less_wrong_does_and_doesnt_help/\n\n"
+  unless ARGV.length == 3
+    puts "Usage: ruby #{__FILE__} [filetype] [url] [author]"
+    puts "Example: ruby #{__FILE__} epub http://lesswrong.com/lw/34a/goals_for_which_less_wrong_does_and_doesnt_help/ AnnaSalamon\n\n"
     exit
   end
   
   p = Post.new(ARGV[1].dup, true)
-  eb = Builder.new(p, ARGV.first.dup, p.title, p.slug)
+  eb = Builder.new(p, ARGV.first.dup, p.title, ARGV[2].dup, p.slug)
   eb.build
 end
