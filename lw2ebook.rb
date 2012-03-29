@@ -97,13 +97,7 @@ class Builder
       else raise "Please give an array of Posts or a single Post."
     end
     @title = title
-    @slug = case slug.nil?
-      when true then
-      s = title.gsub(/[^a-zA-Z0-9]+/, "_").downcase
-      s.gsub(/^_+/, "").gsub(/_+$/, "") # remove underscores on either side
-      when false then
-        slug
-    end
+    @slug = slug || title.gsub(/[^a-zA-Z0-9]+/, "_").downcase.gsub(/^_+/, "").gsub(/_+$/, "") # remove underscores on either side
     @format = format.delete('.')
     @author = author
   end
@@ -137,8 +131,8 @@ class Builder
   def write_post(post)
     content = download_images(post.content)
     urls_hash = Hash.new
-    @posts.each do |post|
-      urls_hash[post.url] = true
+    @posts.each do |p|
+      urls_hash[p.url] = true
     end
     if urls_hash.include?(post.url)
       title = post.title
