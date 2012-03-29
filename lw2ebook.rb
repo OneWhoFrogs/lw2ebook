@@ -97,13 +97,7 @@ class Builder
       else raise "Please give an array of Posts or a single Post."
     end
     @title = title
-    @slug = case slug.nil?
-      when true then
-      s = title.gsub(/[^a-zA-Z0-9]+/, "_").downcase
-      s.gsub(/^_+/, "").gsub(/_+$/, "") # remove underscores on either side
-      when false then
-        slug
-    end
+    @slug = slug || title.gsub(/[^a-zA-Z0-9]+/, "_").downcase.gsub(/^_+/, "").gsub(/_+$/, "") # remove underscores on either side
     @format = format.delete('.')
   end
   
